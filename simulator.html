@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 20px;
+      }
+      #myCanvas {
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="1500" height="500"></canvas>
+    <script>
+      var image={};
+      function setImage(raw){
+        image = raw
+      }
+
+      function getPixel(image , x, y){
+        if (!image.pixels) throw new Error("pixel data is empty");
+        if (x >= image.width || y >= image.height){
+          throw new Error("x,y position out of bound");
+        }
+        var i = image.colors * image.bitDepth / 8 * (y * image.width + x);
+        var pixels = image.pixels;
+        
+        switch (image.colorType){
+          case 0: return [pixels.data[i], pixels.data[i], pixels.data[i], 255];
+          case 2: return [pixels.data[i], pixels.data[i + 1], pixels.data[i + 2], 255];
+          case 3: return [
+            image.palette[pixels.data[i] * 3 + 0],
+            image.palette[pixels.data[i] * 3 + 1],
+            image.palette[pixels.data[i] * 3 + 2],
+            255];
+          case 4: return [pixels.data[i], pixels.data[i], pixels.data[i], pixels.data[i + 1]];
+          case 6: return [pixels.data[i], pixels.data[i + 1], pixels.data[i + 2], pixels.data[i + 3]];
+        }
+      }
+
+
+      var xhr = new XMLHttpRequest(); //getting image
+      xhr.open('GET', 'json/sutd.json', true);
+      xhr.responseType = 'json';
+
+      xhr.onload = function(e){
+          if (this.status == 200){
+            var raw = this.response;
+            //if (e) throw e;
+            setImage(raw);
+          }
+      };
+      xhr.send();
+
+
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+
+      var space = 50;
+      var offsetx = 20;
+      var offsety = 20;
+      setTimeout(function(){
+        for (var i = 0; i < 30; i++) {
+          for (var j = 0; j < 10; j++) {
+            context.beginPath();
+            context.rect(offsetx + i * space, offsety + j * space, 7, 5);
+            var pixel = getPixel(image, i, j);
+            context.fillStyle = "rgba(" + pixel[0] +','+ pixel[1] +','+ pixel[2]+','+ pixel[3]+")";
+            context.fill();
+          };
+        };
+        var move = 0;
+        setInterval(function(){
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          for (var i = 0; i < 30; i++) {
+            for (var j = 0; j < 10; j++) {
+              context.beginPath();
+              context.rect(offsetx + i * space, offsety + j * space, 5, 5);
+              var xpos = (i + move) % image.width
+              var pixel = getPixel(image, xpos, j);
+              context.fillStyle = "rgba(" + pixel[0] +','+ pixel[1] +','+ pixel[2]+','+ pixel[3]+")";
+              context.fill();
+            };
+          };
+          move += 1;
+        }, 500);
+
+      }, 200)
+      
+      
+      
+    </script>
+  </body>
+</html>
