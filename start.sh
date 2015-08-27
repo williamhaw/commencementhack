@@ -1,3 +1,3 @@
 #!/bin/bash -e
 
-cd ~/commencementhack && forever start server.js
+forever start server.js
