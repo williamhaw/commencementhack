@@ -10,7 +10,7 @@
                //alert("WebSocket is supported by your Browser!");
                
                // Let us open a web socket
-               var ws = new WebSocket("ws://hack.williamhaw.com:8080");
+               var ws = new WebSocket("ws://localhost:8080");
 				
                ws.onopen = function()
                {
@@ -18,7 +18,7 @@
                   var x = document.getElementById("positionx");
                   var y = document.getElementById("positiony");
                   var position = x.options[x.selectedIndex].value + ',' + y.options[y.selectedIndex].value;
-                  ws.send(position);
+                  ws.send(":" + position);
                   //alert("Message is sent...");
                };
 				
@@ -33,7 +33,7 @@
                ws.onclose = function()
                { 
                   // websocket is closed.
-                  alert("Connection is closed...");
+                  //alert("Server can't be reached. Try refreshing.");
                   document.getElementById("result").innerHTML = "closed";
                };
             }

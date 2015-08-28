@@ -62,8 +62,8 @@
       var offsetx = 20;
       var offsety = 20;
       setTimeout(function(){
-        for (var i = 0; i < 30; i++) {
-          for (var j = 0; j < 10; j++) {
+        for (var i = 0; i < image.width; i++) {
+          for (var j = 0; j < image.height; j++) {
             context.beginPath();
             context.rect(offsetx + i * space, offsety + j * space, 7, 5);
             var pixel = getPixel(image, i, j);
@@ -74,8 +74,8 @@
         var move = 0;
         setInterval(function(){
           context.clearRect(0, 0, canvas.width, canvas.height);
-          for (var i = 0; i < 30; i++) {
-            for (var j = 0; j < 10; j++) {
+          for (var i = 0; i < image.width; i++) {
+            for (var j = 0; j < image.height; j++) {
               context.beginPath();
               context.rect(offsetx + i * space, offsety + j * space, 5, 5);
               var xpos = (i + move) % image.width

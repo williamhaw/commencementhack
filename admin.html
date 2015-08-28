@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+	
+      <script type="text/javascript">
+         function WebSocketTest()
+         {
+            if ("WebSocket" in window)
+            {
+               //alert("WebSocket is supported by your Browser!");
+               
+               // Let us open a web socket
+               var ws = new WebSocket("ws://localhost:8080");
+				
+               ws.onopen = function()
+               {
+                  // Web Socket is connected, send data using send()
+                  ws.send("start:");
+                  //alert("Message is sent...");
+               };
+				
+               ws.onmessage = function (evt) 
+               { 
+                  var received_msg = JSON.parse(evt.data);
+                  //alert("Message is received..."+ received_msg);
+                  //document.getElementById("result").innerHTML = received_msg;
+                  document.body.style.background = 'rgba(' + received_msg[0] +','+ received_msg[1] +','+ received_msg[2]+','+ received_msg[3]+')';
+               };
+				
+               ws.onclose = function()
+               { 
+                  // websocket is closed.
+                  //alert("Server can't be reached. Try refreshing.");
+                  document.getElementById("result").innerHTML = "closed";
+               };
+            }
+            
+            else
+            {
+               // The browser doesn't support WebSocket
+               alert("WebSocket is NOT supported by your Browser! Use the Chrome browser for your phone.");
+            }
+         }
+      </script>
+		
+   </head>
+   <body>
+   
+      <div id="sse">
+         <a href="javascript:WebSocketTest()">Start Animation</a>
+      </div>
+      <div id='result'></div>
+      
+      
+   </body>
+</html>
