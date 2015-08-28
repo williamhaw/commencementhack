@@ -61,7 +61,7 @@ var sequence = [
       dirY:0,//1 move down, -1 move up
       offsetx:0, 
       offsety:0, 
-      numticks:30
+      numticks:90
     },
     {
       image:'sutd',
